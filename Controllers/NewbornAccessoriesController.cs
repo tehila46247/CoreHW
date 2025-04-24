@@ -1,68 +1,65 @@
 using Microsoft.AspNetCore.Mvc;
-using Lesson1.Models;
+using ProjectApi.Models;
+using ProjectApi.Services;
+using ProjectApi.Interfaces;
 
-namespace Lesson1.Controllers;
+namespace ApiProject.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+
 public class NewbornAccessoriesController : ControllerBase
+
 {
-    private static List<NewbornAccessories> list;
-    static NewbornAccessoriesController()
+    private INewbornService NewbornService;
+    public NewbornAccessoriesController(INewbornService newbornService)
     {
-        list = new List<NewbornAccessories>
-        {
-            new NewbornAccessories { Id = 1, Name = "Soft carpet" },
-            new NewbornAccessories { Id = 2, Name = "Basket of keys", IsInUse = true }
-        };
+        this.NewbornService = newbornService;
     }
 
     [HttpGet]
     public IEnumerable<NewbornAccessories> Get()
     {
-        return list;
+        return NewbornService.GetAll();
     }
+
     [HttpGet("{id}")]
     public ActionResult<NewbornAccessories> Get(int id)
     {
-        var newborn = list.FirstOrDefault(p => p.Id == id);
-        if (newborn == null)
+        var newborn = NewbornService.Get(id);
+        if (newborn is null)
             return BadRequest("invalid id");
         return newborn;
     }
 
     [HttpPost]
     public ActionResult Insert(NewbornAccessories newborn)
-    {
-        var maxId = list.Max(p => p.Id);
-        newborn.Id = maxId + 1;
-        list.Add(newborn);
-
+    {        
+        NewbornService.Add(newborn);
         return CreatedAtAction(nameof(Insert), new { id = newborn.Id }, newborn);
-    }
+    }  
 
-
+    
     [HttpPut("{id}")]
     public ActionResult Update(int id, NewbornAccessories newborn)
-    {
-        var oldNewborn = list.FirstOrDefault(p => p.Id == id);
-        if (oldNewborn == null)
+    { 
+        var oldNewBorn = NewbornService.Get(id);
+        if (oldNewBorn == null) 
             return BadRequest("invalid id");
-        if (oldNewborn.Id != newborn.Id)
+        if (newborn.Id != oldNewBorn.Id)
             return BadRequest("id mismatch");
 
-        oldNewborn.Name = newborn.Name;
-        oldNewborn.IsInUse = newborn.IsInUse;
+        NewbornService.Update(newborn);
         return NoContent();
-    }
+    } 
 
     [HttpDelete("{id}")]
-    public ActionResult Delete(int id)
-    {
-        var oldNewborn = list.FirstOrDefault(p => p.Id == id);
-        if (oldNewborn == null)
+    public ActionResult Delete(int id){
+        var oldNewBorn = NewbornService.Get(id);
+        if (oldNewBorn is null) 
             return BadRequest("invalid id");
-        list.Remove(oldNewborn);
+        NewbornService.Delete(id);
         return NoContent();
     }
+    
 }
