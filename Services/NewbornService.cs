@@ -1,9 +1,6 @@
+
 using ProjectApi.Interfaces;
 using ProjectApi.Models;
-using ProjectApi.Services;
-using Microsoft.Extensions.DependencyInjection;
-
-
 
 namespace ProjectApi.Services
 {
@@ -51,8 +48,8 @@ namespace ProjectApi.Services
         }
 
         public int Count { get => NewbornList.Count(); }
-
     }
+
     public static class NewbornServiceHelper
     {
         public static void AddNewbornService(this IServiceCollection services)
