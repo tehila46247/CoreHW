@@ -1,12 +1,16 @@
 using ProjectApi.Interfaces;
 using ProjectApi.Models;
+using ProjectApi.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+
 
 namespace ProjectApi.Services
 {
     public class NewbornService : INewbornService
     {
 
-        List<NewbornAccessories> NewbornList { get; } 
+        List<NewbornAccessories> NewbornList { get; }
         int nextId = 3;
 
         public NewbornService()
@@ -31,7 +35,7 @@ namespace ProjectApi.Services
         public void Delete(int id)
         {
             var newborn = Get(id);
-            if(newborn is null)
+            if (newborn is null)
                 return;
 
             NewbornList.Remove(newborn);
@@ -40,12 +44,21 @@ namespace ProjectApi.Services
         public void Update(NewbornAccessories newborn)
         {
             var index = NewbornList.FindIndex(n => n.Id == newborn.Id);
-            if(index == -1)
+            if (index == -1)
                 return;
 
             NewbornList[index] = newborn;
         }
 
-        public int Count { get =>  NewbornList.Count();}
+        public int Count { get => NewbornList.Count(); }
+
+    }
+    public static class NewbornServiceHelper
+    {
+        public static void AddNewbornService(this IServiceCollection services)
+        {
+            services.AddSingleton<INewbornService, NewbornService>();
+        }
+
     }
 }

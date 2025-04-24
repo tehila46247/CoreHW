@@ -3,7 +3,7 @@ using ProjectApi.Models;
 using ProjectApi.Services;
 using ProjectApi.Interfaces;
 
-namespace ApiProject.Controllers;
+namespace ProjectApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
