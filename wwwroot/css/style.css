@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+body.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.table-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    /* הקטנו את ה-padding */
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+th {
+    background: #5cb85c;
+    color: white;
+}
+
+button {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    /* הקטנו את ה-padding */
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    /* הוספת רווח בין הכפתורים */
+    font-size: 14px;
+    /* קביעת גודל טקסט */
+}
+
+
+button:hover {
+    background: #4cae4c;
+}
+
+.form-container {
+    display: none;
+    margin-top: 20px;
+}
+
+a {
+    cursor: pointer;
+    color: red;
+    text-decoration: none;
+    /* הסרת קו תחתון */
+}
+
+
+#addButton {
+    display: none;
+}
+
+#addForm {
+    display: none;
+}

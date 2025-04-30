@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Newborn Accessories CRUD </title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <button onclick="logOut()">logout</button>
+    <div class="container">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>QuetionTime</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="NewbornAccessoriesItem"></tbody>
+            </table>
+        </div>
+
+        <br><br>
+        <button id="addProductButton" onclick="toggleAddForm()">Add NewbornAccessories</button>
+
+        <br>
+        <!-- טופס הוספת מוצר -->
+        <div id="addForm" class="form-container">
+            <h3>Add NewbornAccessories</h3>
+            <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                <input type="text" id="add-name" placeholder="שם מוצר" required />
+                <input type="number" id="add-price" placeholder="מחיר" required />
+                <input type="number" id="add-quetionTime" placeholder="זמן ההשאלה" required />
+                <input type="submit" value="Add" />
+                <a onclick="closeInputAdd()" aria-label="Close">&#10006;</a>
+            </form>
+        </div>
+
+        <!-- טופס עריכת מוצר -->
+        <div id="editForm" class="form-container">
+            <h3>Edit Jewelry</h3>
+            <form action="javascript:void(0);" onsubmit="updateItem()">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-name" placeholder="שם מוצר" required />
+                <input type="number" id="edit-price" placeholder="מחיר" required />
+                <input type="number" id="edit-quetionTime" placeholder="זמן ההשאלה" required />
+                <input type="submit" value="Save">
+                <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+            </form>
+        </div>
+        <p id="counter"></p>
+    </div>
+
+    <script src="js/products.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        getItems();
+    </script>
+</body>
+
+</html>

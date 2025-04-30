@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    /* קביעת רוחב קבוע */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* כולל padding בגובה הכללי */
+}
+
+button {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    /* כפתור ממלא את הרוחב */
+}
+
+button:hover {
+    background: #4cae4c;
+}
+
+.hidden {
+    display: none;
+}
+
+#admin-buttons,
+#user-buttons {
+    display: none;
+}
+
+#error-message {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+    /* מרכז את הודעת השגיאה */
+}
+
+

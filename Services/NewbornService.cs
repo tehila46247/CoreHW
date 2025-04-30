@@ -1,4 +1,4 @@
-
+using System.Text.Json;
 using ProjectApi.Interfaces;
 using ProjectApi.Models;
 
@@ -6,27 +6,56 @@ namespace ProjectApi.Services
 {
     public class NewbornService : INewbornService
     {
-
-        List<NewbornAccessories> NewbornList { get; }
-        int nextId = 3;
-
+        int nextId;
+        string text;
+        List<NewbornAccessories>? newbornList { get; }
         public NewbornService()
         {
-            NewbornList = new List<NewbornAccessories>
+            text = Path.Combine(
+                "Data",
+                "NewbornAccessories.json"
+            );
+
+            using (var jsonOpen = File.OpenText(text))
             {
-               new NewbornAccessories { Id = 1, Name = "Soft carpet" },
-               new NewbornAccessories { Id = 2, Name = "Basket of keys", IsInUse = true }
-            };
+                newbornList = JsonSerializer.Deserialize<List<NewbornAccessories>>(jsonOpen.ReadToEnd(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            nextId = newbornList != null ? newbornList[newbornList.Count - 1].Id + 1 : 1;
         }
 
-        public List<NewbornAccessories> GetAll() => NewbornList;
+        private void saveToFile()
+        {
+            File.WriteAllText(text, JsonSerializer.Serialize(newbornList));
+        }
 
-        public NewbornAccessories Get(int id) => NewbornList.FirstOrDefault(n => n.Id == id);
+        public List<NewbornAccessories>? GetAll() => newbornList;
 
-        public void Add(NewbornAccessories newborn)
+        public NewbornAccessories? Get(int id) => newbornList?.FirstOrDefault(j => j.Id == id);
+
+        public void Add(NewbornAccessories newborn, int UserId)
         {
             newborn.Id = nextId++;
-            NewbornList.Add(newborn);
+            newborn.UserId = UserId;
+            newbornList?.Add(newborn);
+            saveToFile();
+        }
+
+        public void Update(NewbornAccessories newborn, int UserId)
+        {
+            if (newbornList == null)
+                throw new InvalidOperationException("The newborn accessories list has not been initialized.");
+
+            var index = newbornList.FindIndex(n => n.Id == newborn.Id);
+            if (index == -1)
+                return;
+
+            newborn.UserId = UserId;
+            newbornList[index] = newborn;
+            saveToFile();
         }
 
         public void Delete(int id)
@@ -34,28 +63,32 @@ namespace ProjectApi.Services
             var newborn = Get(id);
             if (newborn is null)
                 return;
-
-            NewbornList.Remove(newborn);
+            newbornList?.Remove(newborn);
+            saveToFile();
         }
 
-        public void Update(NewbornAccessories newborn)
+        public int Count { get => newbornList?.Count() ?? 0; }
+
+
+        public void DeleteAccesoryByUserId(int userId)
         {
-            var index = NewbornList.FindIndex(n => n.Id == newborn.Id);
-            if (index == -1)
+            var itemsToRemove = newbornList?.Where(n => n.UserId == userId).ToList();
+
+            if (itemsToRemove == null || !itemsToRemove.Any())
                 return;
 
-            NewbornList[index] = newborn;
+            foreach (var item in itemsToRemove)
+            {
+                newbornList?.Remove(item);
+            }
+            saveToFile();
         }
-
-        public int Count { get => NewbornList.Count(); }
     }
-
     public static class NewbornServiceHelper
     {
-        public static void AddNewbornService(this IServiceCollection services)
+        public static void AddAccessoryService(this IServiceCollection services)
         {
             services.AddSingleton<INewbornService, NewbornService>();
         }
-
     }
 }
